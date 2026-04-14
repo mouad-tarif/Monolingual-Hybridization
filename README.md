@@ -23,10 +23,11 @@ Two models speak different languages. Their tokenizers may be different formats 
 
 ## Requirements
 
+
 ```bash
 pip install torch safetensors transformers
-
-📄 Files Description (English):
+```
+## Files Description (English):
 
 hybridize_models.py
 Main hybridization script. Loads both models, expands dimensions (zero-padding for 2D tensors, repetition for 1D tensors), then merges them into a single safetensors file.
@@ -38,7 +39,7 @@ hybrid_model.safetensors
 Output file generated after running the hybridization script. Contains all merged weights from both models with "donor." prefix for the second model's keys.
 
 
-Usage
+## Usage
 Step 1: Hybridize two models
 Edit the paths in hybridize_models.py:
 
@@ -48,12 +49,14 @@ model_b_path = "path/to/model_b.safetensors"
 output_path = "hybrid_model.safetensors"
 Then run:
 
-bash
+```bash
 python hybridize_models.py
+```
 Step 2: Load and test the hybrid
-bash
+```bash
 python load_and_test_hybrid.py
-How It Works
+```
+## How It Works
 text
 Model A (Language A) + Model B (Language B)
            ↓
@@ -75,7 +78,7 @@ Garbage collection every 50 tensors
 
 Limit: 4GB RAM
 
-Results
+## Results
 ✅ Both original languages preserved
 
 ✅ No single model dominates
