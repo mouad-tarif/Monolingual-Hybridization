@@ -1,27 +1,53 @@
-# Monolingual Model Hybridization
+Files
+File	Description
+hybridize_models.py	Main hybridization script
+load_and_test_hybrid.py	Load and test the hybrid model
+hybrid_model.safetensors	Output (generated after running)
+Usage
+Step 1: Hybridize two models
+Edit the paths in hybridize_models.py:
 
-Hybridization of two monolingual language models without retraining. Zero-padding expansion for 2D tensors, repetition for 1D tensors, RAM-limited to 4GB.
+python
+model_a_path = "path/to/model_a.safetensors"
+model_b_path = "path/to/model_b.safetensors"
+output_path = "hybrid_model.safetensors"
+Then run:
 
-## Author
+bash
+python hybridize_models.py
+Step 2: Load and test the hybrid
+bash
+python load_and_test_hybrid.py
+How It Works
+text
+Model A (Language A) + Model B (Language B)
+           ↓
+    Zero-padding expansion
+    Repetition for 1D tensors
+           ↓
+    Hybrid Model (Both Languages)
+Expansion Strategy
+Tensor Type	Method
+2D (weights)	Zero-padding
+1D (biases, norms)	Repetition
+RAM Management
+Load tensors sequentially, not all at once
 
-Mouad Tarif – Independent Researcher
+Convert to float16 (half precision)
 
-## Concept
+Garbage collection every 50 tensors
 
-This project hybridizes two monolingual language models (each trained on a different single language) into one functional model. No retraining. No fine-tuning. Just direct tensor expansion and merging.
+Limit: 4GB RAM
 
-### The Problem
+Results
+✅ Both original languages preserved
 
-Two models speak different languages. Their tokenizers may be different formats (`tokenizer.json` vs `vocab.json`). Their vocabulary sizes and embedding dimensions may differ. How to merge them?
+✅ No single model dominates
 
-### The Solution
+✅ Emergent cross-lingual capabilities observed
 
-1. **Expand tensors** – Zero-padding for 2D tensors (weight matrices), repetition for 1D tensors (biases, layer norms)
-2. **Align tokenizers** – Convert `vocab.json` to `tokenizer.json` format
-3. **Merge weights** – Load both models, add donor keys with `donor.` prefix
-4. **Save hybrid** – One `.safetensors` file ready for inference
+✅ Stable inference confirmed
 
-## Requirements
+License
+MIT
 
-```bash
-pip install torch safetensors transformers
